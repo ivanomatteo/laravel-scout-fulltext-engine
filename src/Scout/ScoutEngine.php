@@ -7,17 +7,17 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Support\Facades\App;
-use IvanoMatteo\LaravelScoutFullTextEngine\LaravelScoutFullTextEngine;
+use IvanoMatteo\LaravelScoutFullTextEngine\FullTextIndexer;
 use Laravel\Scout\Builder;
 use Laravel\Scout\Engines\Engine;
 
 class ScoutEngine extends Engine
 {
-    private LaravelScoutFullTextEngine $ftindexer;
+    private FullTextIndexer $ftindexer;
 
     public function __construct()
     {
-        $this->ftindexer = App::make(LaravelScoutFullTextEngine::class);
+        $this->ftindexer = App::make(FullTextIndexer::class);
     }
 
     /**

@@ -12,7 +12,7 @@ use IvanoMatteo\LaravelScoutFullTextEngine\Parsers\Extractors\FeatureExtractor;
 use IvanoMatteo\LaravelScoutFullTextEngine\Parsers\Query\QueryParser;
 use IvanoMatteo\LaravelScoutFullTextEngine\Scopes\Search\MysqlFullTextScope;
 
-class LaravelScoutFullTextEngine
+class FullTextIndexer
 {
     private ?Collection $defaultExtractors = null;
 
