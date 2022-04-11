@@ -58,8 +58,10 @@ class LaravelScoutFullTextEngineServiceProvider extends PackageServiceProvider
             return new LaravelScoutFullTextEngine();
         });
 
-        resolve(EngineManager::class)->extend(Pkg::configGet('scount_engine_name'), function () {
-            return new ScoutEngine();
-        });
+        if (class_exists(EngineManager::class)) {
+            $this->app->make(EngineManager::class)->extend(Pkg::configGet('scount_engine_name'), function () {
+                return new ScoutEngine();
+            });
+        }
     }
 }
