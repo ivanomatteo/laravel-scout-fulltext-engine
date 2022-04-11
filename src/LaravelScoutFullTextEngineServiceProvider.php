@@ -2,14 +2,13 @@
 
 namespace IvanoMatteo\LaravelScoutFullTextEngine;
 
-
-use Spatie\LaravelPackageTools\Package;
-use Spatie\LaravelPackageTools\PackageServiceProvider;
 use IvanoMatteo\LaravelScoutFullTextEngine\Parsers\Extractors\CompositeNameExtractor;
 use IvanoMatteo\LaravelScoutFullTextEngine\Parsers\Query\QueryParser;
 use IvanoMatteo\LaravelScoutFullTextEngine\Parsers\Query\QueryParserMysqlFullTextBool;
 use IvanoMatteo\LaravelScoutFullTextEngine\Scout\ScoutEngine;
 use Laravel\Scout\EngineManager;
+use Spatie\LaravelPackageTools\Package;
+use Spatie\LaravelPackageTools\PackageServiceProvider;
 
 class LaravelScoutFullTextEngineServiceProvider extends PackageServiceProvider
 {
@@ -25,7 +24,6 @@ class LaravelScoutFullTextEngineServiceProvider extends PackageServiceProvider
             ->hasConfigFile()
             ->hasMigration('create_full_text_entries_table');
     }
-
 
     public function bootingPackage()
     {
