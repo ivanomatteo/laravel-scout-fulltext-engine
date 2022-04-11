@@ -11,7 +11,7 @@ use IvanoMatteo\LaravelScoutFullTextEngine\LaravelScoutFullTextEngine;
 use Laravel\Scout\Builder;
 use Laravel\Scout\Engines\Engine;
 
-class MysqlEngine extends Engine
+class ScoutEngine extends Engine
 {
     private LaravelScoutFullTextEngine $ftindexer;
 

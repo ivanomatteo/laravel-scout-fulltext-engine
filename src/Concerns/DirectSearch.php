@@ -21,13 +21,13 @@ trait DirectSearch
         return $ftindexer->searchWithJoin($this, $q, $search);
     }
 
-
-    /*
-
     public function getFullTextEntryModel()
     {
         return FullTextEntry::class;
     }
+
+    /*
+
 
     public function prepareFullTextQuery(string $query): string
     {

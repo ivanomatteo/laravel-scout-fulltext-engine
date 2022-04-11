@@ -5,7 +5,7 @@ use IvanoMatteo\LaravelScoutFullTextEngine\Parsers\Query\QueryParserMysqlFullTex
 
 return [
 
-    'scount_engine_name' => 'mysql',
+    'scount_engine_name' => 'scout-fulltext-engine',
 
     'fulltext_options' => [
         'mode' => 'boolean',
