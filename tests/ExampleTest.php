@@ -16,4 +16,3 @@ it('can parse fulltext query', function () {
 
     expect($parsed)->toContain('l_acquila');
 });
-
