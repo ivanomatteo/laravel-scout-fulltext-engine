@@ -1,9 +1,9 @@
 <?php
 
-namespace IvanoMatteo\LaravelFulltextIndexer\Parsers\Query;
+namespace IvanoMatteo\LaravelScoutFullTextEngine\Parsers\Query;
 
 use Illuminate\Support\Collection;
-use IvanoMatteo\LaravelFulltextIndexer\Parsers\Extractors\FeatureExtractor;
+use IvanoMatteo\LaravelScoutFullTextEngine\Parsers\Extractors\FeatureExtractor;
 use Str;
 
 class QueryParserMysqlFullTextBool implements QueryParser

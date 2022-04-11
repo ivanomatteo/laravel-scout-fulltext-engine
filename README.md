@@ -55,8 +55,8 @@ php artisan vendor:publish --tag="laravel-scout-fulltext-engine-views"
 ## Usage
 
 ```php
-$laravelScoutFulltextEngine = new IvanoMatteo\LaravelScoutFulltextEngine();
-echo $laravelScoutFulltextEngine->echoPhrase('Hello, IvanoMatteo!');
+$laravelScoutFullTextEngine = new IvanoMatteo\LaravelScoutFullTextEngine();
+echo $laravelScoutFullTextEngine->echoPhrase('Hello, IvanoMatteo!');
 ```
 
 ## Testing

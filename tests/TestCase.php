@@ -1,10 +1,10 @@
 <?php
 
-namespace IvanoMatteo\LaravelScoutFulltextEngine\Tests;
+namespace IvanoMatteo\LaravelScoutFullTextEngine\Tests;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Orchestra\Testbench\TestCase as Orchestra;
-use IvanoMatteo\LaravelScoutFulltextEngine\LaravelScoutFulltextEngineServiceProvider;
+use IvanoMatteo\LaravelScoutFullTextEngine\LaravelScoutFullTextEngineServiceProvider;
 
 class TestCase extends Orchestra
 {
@@ -13,14 +13,14 @@ class TestCase extends Orchestra
         parent::setUp();
 
         Factory::guessFactoryNamesUsing(
-            fn (string $modelName) => 'IvanoMatteo\\LaravelScoutFulltextEngine\\Database\\Factories\\'.class_basename($modelName).'Factory'
+            fn (string $modelName) => 'IvanoMatteo\\LaravelScoutFullTextEngine\\Database\\Factories\\'.class_basename($modelName).'Factory'
         );
     }
 
     protected function getPackageProviders($app)
     {
         return [
-            LaravelScoutFulltextEngineServiceProvider::class,
+            LaravelScoutFullTextEngineServiceProvider::class,
         ];
     }
 

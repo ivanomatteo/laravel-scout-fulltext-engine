@@ -1,5 +1,5 @@
 <?php
 
-use IvanoMatteo\LaravelScoutFulltextEngine\Tests\TestCase;
+use IvanoMatteo\LaravelScoutFullTextEngine\Tests\TestCase;
 
 uses(TestCase::class)->in(__DIR__);

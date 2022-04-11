@@ -1,18 +1,18 @@
 <?php
 
-namespace IvanoMatteo\LaravelScoutFulltextEngine;
+namespace IvanoMatteo\LaravelScoutFullTextEngine;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\DB;
-use IvanoMatteo\LaravelFulltextIndexer\Models\FullTextEntry;
-use IvanoMatteo\LaravelFulltextIndexer\Parsers\Extractors\FeatureExtractor;
-use IvanoMatteo\LaravelFulltextIndexer\Parsers\Query\QueryParser;
-use IvanoMatteo\LaravelFulltextIndexer\Scopes\Search\MysqlFullTextScope;
+use IvanoMatteo\LaravelScoutFullTextEngine\Models\FullTextEntry;
+use IvanoMatteo\LaravelScoutFullTextEngine\Parsers\Extractors\FeatureExtractor;
+use IvanoMatteo\LaravelScoutFullTextEngine\Parsers\Query\QueryParser;
+use IvanoMatteo\LaravelScoutFullTextEngine\Scopes\Search\MysqlFullTextScope;
 
-class LaravelScoutFulltextEngine
+class LaravelScoutFullTextEngine
 {
     private ?Collection $defaultExtractors = null;
 
@@ -115,8 +115,8 @@ class LaravelScoutFulltextEngine
 
         $query_prepared = $search;
 
-        if (method_exists($model, 'prepareFulltextQuery')) {
-            $query_prepared = $model->prepareFulltextQuery();
+        if (method_exists($model, 'prepareFullTextQuery')) {
+            $query_prepared = $model->prepareFullTextQuery();
         } elseif (App::bound(QueryParser::class)) {
             /** @var QueryParser */
             $parser = App::make(QueryParser::class);

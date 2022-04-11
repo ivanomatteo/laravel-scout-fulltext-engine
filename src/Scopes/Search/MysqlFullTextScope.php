@@ -1,10 +1,10 @@
 <?php
 
-namespace IvanoMatteo\LaravelFulltextIndexer\Scopes\Search;
+namespace IvanoMatteo\LaravelScoutFullTextEngine\Scopes\Search;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
-use IvanoMatteo\LaravelFulltextIndexer\Scopes\BaseScope;
+use IvanoMatteo\LaravelScoutFullTextEngine\Scopes\BaseScope;
 use RuntimeException;
 
 class MysqlFullTextScope extends BaseScope

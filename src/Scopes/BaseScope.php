@@ -1,6 +1,6 @@
 <?php
 
-namespace IvanoMatteo\LaravelFulltextIndexer\Scopes;
+namespace IvanoMatteo\LaravelScoutFullTextEngine\Scopes;
 
 use Illuminate\Database\Eloquent\Scope;
 

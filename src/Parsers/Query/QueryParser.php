@@ -1,6 +1,6 @@
 <?php
 
-namespace IvanoMatteo\LaravelFulltextIndexer\Parsers\Query;
+namespace IvanoMatteo\LaravelScoutFullTextEngine\Parsers\Query;
 
 interface QueryParser
 {

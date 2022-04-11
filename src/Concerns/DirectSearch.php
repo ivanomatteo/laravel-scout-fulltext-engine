@@ -1,10 +1,10 @@
 <?php
 
-namespace IvanoMatteo\LaravelFulltextIndexer\Concerns;
+namespace IvanoMatteo\LaravelScoutFullTextEngine\Concerns;
 
 use Illuminate\Support\Facades\App;
-use IvanoMatteo\LaravelFulltextIndexer\LaravelFulltextIndexer;
-use IvanoMatteo\LaravelFulltextIndexer\Models\FullTextEntry;
+use IvanoMatteo\LaravelScoutFullTextEngine\LaravelScoutFullTextEngine;
+use IvanoMatteo\LaravelScoutFullTextEngine\Models\FullTextEntry;
 
 trait DirectSearch
 {
@@ -15,8 +15,8 @@ trait DirectSearch
 
     public function scopeDirectSearch($q, $search)
     {
-        /** @var LaravelFulltextIndexer */
-        $ftindexer = App::make(LaravelFulltextIndexer::class);
+        /** @var LaravelScoutFullTextEngine */
+        $ftindexer = App::make(LaravelScoutFullTextEngine::class);
 
         return $ftindexer->searchWithJoin($this, $q, $search);
     }
@@ -29,7 +29,7 @@ trait DirectSearch
         return FullTextEntry::class;
     }
 
-    public function prepareFulltextQuery(string $query): string
+    public function prepareFullTextQuery(string $query): string
     {
         return $query;
     }

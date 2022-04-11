@@ -1,6 +1,6 @@
 <?php
 
-namespace IvanoMatteo\LaravelFulltextIndexer\Parsers\Extractors;
+namespace IvanoMatteo\LaravelScoutFullTextEngine\Parsers\Extractors;
 
 interface FeatureExtractor
 {

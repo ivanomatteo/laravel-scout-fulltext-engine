@@ -1,23 +1,23 @@
 <?php
 
-namespace IvanoMatteo\LaravelFulltextIndexer\Scout;
+namespace IvanoMatteo\LaravelScoutFullTextEngine\Scout;
 
 use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Support\Facades\App;
-use IvanoMatteo\LaravelFulltextIndexer\LaravelFulltextIndexer;
+use IvanoMatteo\LaravelScoutFullTextEngine\LaravelScoutFullTextEngine;
 use Laravel\Scout\Builder;
 use Laravel\Scout\Engines\Engine;
 
 class MysqlEngine extends Engine
 {
-    private LaravelFulltextIndexer $ftindexer;
+    private LaravelScoutFullTextEngine $ftindexer;
 
     public function __construct()
     {
-        $this->ftindexer = App::make(LaravelFulltextIndexer::class);
+        $this->ftindexer = App::make(LaravelScoutFullTextEngine::class);
     }
 
     /**

@@ -1,12 +1,12 @@
 <?php
 
-namespace IvanoMatteo\LaravelScoutFulltextEngine;
+namespace IvanoMatteo\LaravelScoutFullTextEngine;
 
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
-use IvanoMatteo\LaravelScoutFulltextEngine\Commands\LaravelScoutFulltextEngineCommand;
+use IvanoMatteo\LaravelScoutFullTextEngine\Commands\LaravelScoutFullTextEngineCommand;
 
-class LaravelScoutFulltextEngineServiceProvider extends PackageServiceProvider
+class LaravelScoutFullTextEngineServiceProvider extends PackageServiceProvider
 {
     public function configurePackage(Package $package): void
     {

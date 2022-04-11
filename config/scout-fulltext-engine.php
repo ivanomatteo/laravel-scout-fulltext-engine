@@ -1,7 +1,7 @@
 <?php
 
-use IvanoMatteo\LaravelFulltextIndexer\Parsers\Extractors\CompositeNameExtractor;
-use IvanoMatteo\LaravelFulltextIndexer\Parsers\Query\QueryParserMysqlFullTextBool;
+use IvanoMatteo\LaravelScoutFullTextEngine\Parsers\Extractors\CompositeNameExtractor;
+use IvanoMatteo\LaravelScoutFullTextEngine\Parsers\Query\QueryParserMysqlFullTextBool;
 
 return [
 

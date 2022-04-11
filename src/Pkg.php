@@ -1,6 +1,6 @@
 <?php
 
-namespace IvanoMatteo\LaravelScoutFulltextEngine;
+namespace IvanoMatteo\LaravelScoutFullTextEngine;
 
 use Illuminate\Support\Facades\Config;
 

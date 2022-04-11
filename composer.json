@@ -34,13 +34,13 @@
     },
     "autoload": {
         "psr-4": {
-            "IvanoMatteo\\LaravelScoutFulltextEngine\\": "src",
-            "IvanoMatteo\\LaravelScoutFulltextEngine\\Database\\Factories\\": "database/factories"
+            "IvanoMatteo\\LaravelScoutFullTextEngine\\": "src",
+            "IvanoMatteo\\LaravelScoutFullTextEngine\\Database\\Factories\\": "database/factories"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "IvanoMatteo\\LaravelScoutFulltextEngine\\Tests\\": "tests"
+            "IvanoMatteo\\LaravelScoutFullTextEngine\\Tests\\": "tests"
         }
     },
     "scripts": {
@@ -58,7 +58,7 @@
     "extra": {
         "laravel": {
             "providers": [
-                "IvanoMatteo\\LaravelScoutFulltextEngine\\LaravelScoutFulltextEngineServiceProvider"
+                "IvanoMatteo\\LaravelScoutFullTextEngine\\LaravelScoutFullTextEngineServiceProvider"
             ]
         }
     },

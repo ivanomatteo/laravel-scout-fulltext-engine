@@ -1,12 +1,12 @@
 <?php
 
-namespace IvanoMatteo\LaravelFulltextIndexer\Models;
+namespace IvanoMatteo\LaravelScoutFullTextEngine\Models;
 
 use Closure;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
-use IvanoMatteo\LaravelFulltextIndexer\Pkg;
-use IvanoMatteo\LaravelFulltextIndexer\Scopes\Search\MysqlFullTextScope;
+use IvanoMatteo\LaravelScoutFullTextEngine\Pkg;
+use IvanoMatteo\LaravelScoutFullTextEngine\Scopes\Search\MysqlFullTextScope;
 
 class FullTextEntry extends Model
 {
@@ -21,7 +21,7 @@ class FullTextEntry extends Model
     {
         $options = [
             'query' => $search,
-            'query_prepared' => $model->prepareFulltextQuery($search),
+            'query_prepared' => $model->prepareFullTextQuery($search),
             'index' => $model->searchableAs(),
             'fulltext_options' => Pkg::configGet('fulltext_options'),
         ];
