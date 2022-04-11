@@ -3,8 +3,8 @@
 namespace IvanoMatteo\LaravelScoutFulltextEngine\Tests;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Orchestra\Testbench\TestCase as Orchestra;
 use IvanoMatteo\LaravelScoutFulltextEngine\LaravelScoutFulltextEngineServiceProvider;
+use Orchestra\Testbench\TestCase as Orchestra;
 
 class TestCase extends Orchestra
 {

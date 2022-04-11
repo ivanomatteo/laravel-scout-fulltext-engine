@@ -4,7 +4,6 @@ namespace IvanoMatteo\LaravelScoutFulltextEngine;
 
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
-use IvanoMatteo\LaravelScoutFulltextEngine\Commands\LaravelScoutFulltextEngineCommand;
 
 class LaravelScoutFulltextEngineServiceProvider extends PackageServiceProvider
 {
