@@ -50,7 +50,7 @@ class LaravelScoutFullTextEngine
 
     private function getDefaultExtractors()
     {
-        if (!isset($this->defaultExtractors)) {
+        if (! isset($this->defaultExtractors)) {
             $this->defaultExtractors = collect(Pkg::configGet('pre_processing.index_data.extractors'))
                 ->map(fn ($extr) => App::make($extr));
         }
@@ -64,7 +64,7 @@ class LaravelScoutFullTextEngine
 
         if (method_exists($model, 'getIndexFeatureExtractors')) {
             $tmp = $model->getIndexFeatureExtractors();
-            if (!empty($tmp)) {
+            if (! empty($tmp)) {
                 $extractors = $tmp;
             }
         }
@@ -137,13 +137,13 @@ class LaravelScoutFullTextEngine
         if ($connection->getDriverName() === 'mysql') {
             $scope = (new MysqlFullTextScope($connection, ['text']))
                 ->search($options['query_prepared']);
-            if (!empty($options['fulltext_options']['mode'])) {
+            if (! empty($options['fulltext_options']['mode'])) {
                 $scope->inBooleanMode();
             }
-            if (!empty($options['fulltext_options']['order_by_score'])) {
+            if (! empty($options['fulltext_options']['order_by_score'])) {
                 $scope->orderByscore();
             }
-            if (!empty($options['fulltext_options']['add_select_score'])) {
+            if (! empty($options['fulltext_options']['add_select_score'])) {
                 $scope->addSelectScore(true);
             }
             $scope->apply($q, $model);
