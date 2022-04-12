@@ -83,7 +83,7 @@ class ScoutEngine extends Engine
             $q->orderBy($order['column'], $order['direction']);
         }
 
-        return $this->ftindexer->searchWithJoin($model, $q, $query);
+        return $this->ftindexer->search($model, $q, $query);
     }
 
     /**

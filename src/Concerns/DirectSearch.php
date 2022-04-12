@@ -18,7 +18,7 @@ trait DirectSearch
         /** @var FullTextIndexer */
         $ftindexer = App::make(FullTextIndexer::class);
 
-        return $ftindexer->searchWithJoin($this, $q, $search);
+        return $ftindexer->search($this, $q, $search);
     }
 
     public function getFullTextEntryModel()

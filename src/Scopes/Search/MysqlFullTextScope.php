@@ -2,8 +2,9 @@
 
 namespace IvanoMatteo\LaravelScoutFullTextEngine\Scopes\Search;
 
-use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Query\Builder;
 use IvanoMatteo\LaravelScoutFullTextEngine\Scopes\BaseScope;
 use RuntimeException;
 
@@ -34,7 +35,7 @@ class MysqlFullTextScope extends BaseScope
      * @param  \Illuminate\Database\Eloquent\Model  $model
      * @return void
      */
-    public function apply(Builder $q, Model $model)
+    public function apply(Builder|EloquentBuilder $q, Model $model)
     {
         $cond = $this->getFullTextCondition();
 
