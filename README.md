@@ -1,6 +1,3 @@
-
-[<img src="https://github-ads.s3.eu-central-1.amazonaws.com/support-ukraine.svg?t=1" />](https://supportukrainenow.org)
-
 # A scout DB fulltext-based driver that store index data in related tables
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/ivanomatteo/laravel-scout-fulltext-engine.svg?style=flat-square)](https://packagist.org/packages/ivanomatteo/laravel-scout-fulltext-engine)
@@ -8,15 +5,17 @@
 [![GitHub Code Style Action Status](https://img.shields.io/github/workflow/status/ivanomatteo/laravel-scout-fulltext-engine/Check%20&%20fix%20styling?label=code%20style)](https://github.com/ivanomatteo/laravel-scout-fulltext-engine/actions?query=workflow%3A"Check+%26+fix+styling"+branch%3Amain)
 [![Total Downloads](https://img.shields.io/packagist/dt/ivanomatteo/laravel-scout-fulltext-engine.svg?style=flat-square)](https://packagist.org/packages/ivanomatteo/laravel-scout-fulltext-engine)
 
-This is where your description should go. Limit it to a paragraph or two. Consider adding a small example.
+This package provide a Laravel/Scout Engine based on database/fulltext only, but work in a different way compared to the default database Engine.
 
-## Support us
+You don't need to add fulltext indexes to your tables: the data used for search will be stored in a table with a polimorphyc relation.
 
-[<img src="https://github-ads.s3.eu-central-1.amazonaws.com/laravel-scout-fulltext-engine.jpg?t=1" width="419px" />](https://spatie.be/github-ad-click/laravel-scout-fulltext-engine)
+This provide several advantages:
 
-We invest a lot of resources into creating [best in class open source packages](https://spatie.be/open-source). You can support us by [buying one of our paid products](https://spatie.be/open-source/support-us).
+- you don't need to alter current tables's schema
+- it's easy to add metadata
+- indexing process can be done in jobs, so it will not slow down inserts in the tables
 
-We highly appreciate you sending us a postcard from your hometown, mentioning which of our package(s) you are using. You'll find our address on [our contact page](https://spatie.be/about-us). We publish all received postcards on [our virtual postcard wall](https://spatie.be/open-source/postcards).
+
 
 ## Installation
 
@@ -42,22 +41,91 @@ php artisan vendor:publish --tag="laravel-scout-fulltext-engine-config"
 This is the contents of the published config file:
 
 ```php
+
+use IvanoMatteo\LaravelScoutFullTextEngine\Parsers\Extractors\CompositeNameExtractor;
+use IvanoMatteo\LaravelScoutFullTextEngine\Parsers\Query\QueryParserMysqlFullTextBool;
+
 return [
+     'scount_engine_name' => 'scout-fulltext-engine',
+
+    'fulltext_options' => [
+        'mode' => 'boolean',
+        'order_by_score' => true,
+        'add_select_score' => false,
+    ],
+
+    'pre_processing' => [
+        'query' => [
+            'parser' => QueryParserMysqlFullTextBool::class,
+
+            'extractors' => [
+                [
+                    'class' => CompositeNameExtractor::class,
+                    'must_match' => false,
+                    'starts_with' => true,
+                ]
+            ],
+        ],
+        'index_data' => [
+            'extractors' => [
+                CompositeNameExtractor::class,
+            ],
+        ],
+    ],
 ];
 ```
 
-Optionally, you can publish the views using
+## Storing indexed data in different tables
 
-```bash
-php artisan vendor:publish --tag="laravel-scout-fulltext-engine-views"
+It's also possible use different tables to store indexed data, simply creating another table with the same structure of "full_text_entries", the model (should extend FullTextEntry), and adding this function to your models:
+
+```php
+public function getFullTextEntryModel()
+{
+    return FullTextEntry2::class;
+}
 ```
+
 
 ## Usage
 
-```php
-$laravelScoutFullTextEngine = new IvanoMatteo\LaravelScoutFullTextEngine();
-echo $laravelScoutFullTextEngine->echoPhrase('Hello, IvanoMatteo!');
+Simpli configure Laravel Scout to use this driver:
+(in your .env file)
+
 ```
+SCOUT_DRIVER=scout-fulltext-engine
+```
+
+refer to [laravel scout documentation](https://laravel.com/docs/scout) for standard usage.
+
+## Direct Search Mode
+
+This package also provide a "direct search" mode: 
+you just need to add DirectSearch Trait to your Model.
+
+```php
+
+use Laravel\Scout\Searchable;
+use IvanoMatteo\LaravelScoutFullTextEngine\Concerns\DirectSearch;
+
+class RubricaDipAnagrafica extends Model
+{
+    use Searchable;
+    use DirectSearch;
+
+}
+
+```
+
+In this way you get:
+- fullTextEntry() relation to indexed table
+- directSearch() scope, that you can use intead of search()
+
+Scout's search() function, returns an instance of Laravel\Scout\Builder that has limited functionalities.
+
+directSearch() intead, will return an intance of Illuminate\Database\Eloquent\Builder that allow you to combine with all database query operators as usual.
+
+
 
 ## Testing
 
