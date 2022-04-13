@@ -16,10 +16,6 @@ class QueryParserMysqlFullTextBool implements QueryParser
         '-', '+', '<', '>', '@', '(', ')', '~', '"', "'",
     ];
 
-    /**
-     * @param \Illuminate\Database\Connection $conn
-     * @param string[] $columns
-     */
     public function __construct()
     {
     }

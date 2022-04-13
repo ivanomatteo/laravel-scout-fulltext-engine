@@ -69,9 +69,9 @@ class ScoutEngine extends Engine
 
         if ($withTrashed && $this->usesSoftDelete($model)) {
             if ($withTrashed === 1) {
-                $q->onlyTrashed();
+                $q->onlyTrashed(); //@phpstan-ignore-line
             } else {
-                $q->withTrashed();
+                $q->withTrashed(); //@phpstan-ignore-line
             }
         }
 
@@ -125,7 +125,7 @@ class ScoutEngine extends Engine
             $results instanceof EloquentBuilder ||
             $results instanceof QueryBuilder
         ) {
-            return $results->get();
+            return $results->get(); //@phpstan-ignore-line
         }
 
         return $results;
@@ -152,7 +152,7 @@ class ScoutEngine extends Engine
      */
     public function getTotalCount($results)
     {
-        $results->count();
+        return $results->count();
     }
 
     /**
@@ -191,6 +191,6 @@ class ScoutEngine extends Engine
 
     private static function usesSoftDelete($class)
     {
-        return ! empty(class_uses_recursive($class)[SoftDeletes::class]);
+        return !empty(class_uses_recursive($class)[SoftDeletes::class]);
     }
 }

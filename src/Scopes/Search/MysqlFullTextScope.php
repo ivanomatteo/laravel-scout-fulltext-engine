@@ -2,11 +2,13 @@
 
 namespace IvanoMatteo\LaravelScoutFullTextEngine\Scopes\Search;
 
+use Closure;
 use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Query\Builder;
 use IvanoMatteo\LaravelScoutFullTextEngine\Scopes\BaseScope;
 use RuntimeException;
+use Illuminate\Database\Connection;
 
 class MysqlFullTextScope extends BaseScope
 {
@@ -14,27 +16,21 @@ class MysqlFullTextScope extends BaseScope
     private string $mode = 'in natural language mode';
 
 
-    private $conditionManipulator = null;
+    private ?Closure $conditionManipulator = null;
 
     private bool $addSelectScore = false;
     private bool $orderByScore = false;
     private bool $selectAllIfNoColumn = false;
+    private array $columns;
 
-    /**
-     * @param \Illuminate\Database\Connection $conn
-     * @param string[] $columns
-     */
-    public function __construct($conn, array $columns)
+
+    public function __construct(Connection $conn, array $columns)
     {
         parent::__construct($conn);
         $this->columns = $columns;
     }
 
-    /**
-     * @param  \Illuminate\Database\Eloquent\Builder  $builder
-     * @param  \Illuminate\Database\Eloquent\Model  $model
-     * @return void
-     */
+
     public function apply(Builder|EloquentBuilder $q, Model $model)
     {
         $cond = $this->getFullTextCondition();
@@ -67,10 +63,9 @@ class MysqlFullTextScope extends BaseScope
         return $this;
     }
 
-    public function conditionManipulator(callable $conditionManipulator): static
+    public function conditionManipulator(Closure $conditionManipulator): static
     {
         $this->conditionManipulator = $conditionManipulator;
-
         return $this;
     }
 

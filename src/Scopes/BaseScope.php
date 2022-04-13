@@ -2,23 +2,20 @@
 
 namespace IvanoMatteo\LaravelScoutFullTextEngine\Scopes;
 
+use Illuminate\Database\Connection;
 use Illuminate\Database\Eloquent\Scope;
 
 abstract class BaseScope implements Scope
 {
-    /** @var \Illuminate\Database\Connection */
-    protected $conn;
+    protected Connection $conn;
 
-    /**
-     * @param \Illuminate\Database\Connection $conn
-    */
-    public function __construct($conn)
+    public function __construct(Connection $conn)
     {
         $this->conn = $conn;
     }
 
-    /** @return string */
-    protected function escapeColumn($colName)
+
+    protected function escapeColumn($colName): string
     {
         if ($colName instanceof \Illuminate\Database\Query\Expression) {
             return $colName->__toString();
@@ -27,8 +24,8 @@ abstract class BaseScope implements Scope
         return '`' . implode('`', explode('.', trim(str_replace('`', '', $colName)))) . '`';
     }
 
-    /** @return string */
-    protected function quote($value)
+
+    protected function quote($value): string
     {
         if ($value instanceof \Illuminate\Database\Query\Expression) {
             return $value->__toString();
@@ -37,8 +34,8 @@ abstract class BaseScope implements Scope
         return $this->conn->getPdo()->quote($value);
     }
 
-    /** @return string */
-    protected function likeEscape($value)
+
+    protected function likeEscape($value): string
     {
         if ($value instanceof \Illuminate\Database\Query\Expression) {
             return $value->__toString();
@@ -47,8 +44,8 @@ abstract class BaseScope implements Scope
         return str_replace(['\\', '_', '%'], ['\\\\', '\\_', '\\%'], $value);
     }
 
-    /** @return array */
-    protected function escapeColumns(array $columns)
+
+    protected function escapeColumns(array $columns): array
     {
         return collect($columns)->map(function ($c) {
             return $this->escapeColumn($c);
