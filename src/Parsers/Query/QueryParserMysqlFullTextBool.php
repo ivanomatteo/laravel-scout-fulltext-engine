@@ -15,9 +15,7 @@ class QueryParserMysqlFullTextBool implements QueryParser
     public const DEF_RESERVED_CHARS = [
         '-', '+', '<', '>', '@', '(', ')', '~', '"', "'",
     ];
-    public const DEF_REPLACE_CHARS = [
-        ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ',
-    ];
+
 
     /**
      * @param \Illuminate\Database\Connection $conn
@@ -72,7 +70,7 @@ class QueryParserMysqlFullTextBool implements QueryParser
 
     public function tokenize(string $query): Collection
     {
-        $query = str_replace(static::DEF_RESERVED_CHARS, static::DEF_REPLACE_CHARS, $query);
+        $query = str_replace(static::DEF_RESERVED_CHARS, ' ', $query);
 
         return collect(preg_split("/\\s+/", Str::transliterate(trim($query))))
             ->filter(fn ($str) => (trim($str) !== '' && $str !== null))
