@@ -54,24 +54,9 @@ class QueryParserMysqlFullTextBool implements QueryParser
 
     public function parseSearchText(string $query): string
     {
-        $query = str_replace(static::DEF_RESERVED_CHARS, static::DEF_REPLACE_CHARS, $query);
+        $tmpTokens = $this->tokenize($query);
 
-        $tmpTokens = collect(preg_split("/\\s+/", Str::transliterate(trim($query))))
-            ->filter(fn ($str) => (trim($str) !== '' && $str !== null))
-            ->map(function ($word) {
-                return implode(' ', preg_split("/\\s+/", trim($word)));
-            });
-        $tmpQuery = $tmpTokens->implode(' ');
-
-        $extracted = collect($this->extractors)
-            ->reduce(function (Collection $carry, array $extr) use ($tmpQuery) {
-                $tmp_extracted = $extr['extractor']->extract($tmpQuery);
-
-                return $carry->merge(collect($tmp_extracted)
-                    ->map(function (string $str) use ($extr) {
-                        return $extr['prefix'] . $str . $extr['suffix'];
-                    }));
-            }, collect());
+        $extracted = $this->runExtractors($tmpTokens->implode(' '));
 
         return $tmpTokens->map(function (string $word) {
             if ($this->startsWith) {
@@ -83,5 +68,33 @@ class QueryParserMysqlFullTextBool implements QueryParser
 
             return $word;
         })->merge($extracted)->implode(' ');
+    }
+
+
+    public function tokenize(string $query): Collection
+    {
+        $query = str_replace(static::DEF_RESERVED_CHARS, static::DEF_REPLACE_CHARS, $query);
+
+        return collect(preg_split("/\\s+/", Str::transliterate(trim($query))))
+            ->filter(fn ($str) => (trim($str) !== '' && $str !== null))
+            ->map(function ($word) {
+                return implode(' ', preg_split("/\\s+/", trim($word)));
+            });
+    }
+
+
+    public function runExtractors(string $tmpQuery): Collection
+    {
+        /** @var Collection */
+        $result = collect($this->extractors)
+            ->reduce(function (Collection $carry, array $extr) use ($tmpQuery) {
+                $tmp_extracted = $extr['extractor']->extract($tmpQuery);
+
+                return $carry->merge(collect($tmp_extracted)
+                    ->map(function (string $str) use ($extr) {
+                        return $extr['prefix'] . $str . $extr['suffix'];
+                    }));
+            }, collect());
+        return $result;
     }
 }
