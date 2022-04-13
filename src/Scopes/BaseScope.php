@@ -14,7 +14,6 @@ abstract class BaseScope implements Scope
         $this->conn = $conn;
     }
 
-
     protected function escapeColumn($colName): string
     {
         if ($colName instanceof \Illuminate\Database\Query\Expression) {
@@ -23,7 +22,6 @@ abstract class BaseScope implements Scope
 
         return '`' . implode('`', explode('.', trim(str_replace('`', '', $colName)))) . '`';
     }
-
 
     protected function quote($value): string
     {
@@ -34,7 +32,6 @@ abstract class BaseScope implements Scope
         return $this->conn->getPdo()->quote($value);
     }
 
-
     protected function likeEscape($value): string
     {
         if ($value instanceof \Illuminate\Database\Query\Expression) {
@@ -43,7 +40,6 @@ abstract class BaseScope implements Scope
 
         return str_replace(['\\', '_', '%'], ['\\\\', '\\_', '\\%'], $value);
     }
-
 
     protected function escapeColumns(array $columns): array
     {

@@ -191,6 +191,6 @@ class ScoutEngine extends Engine
 
     private static function usesSoftDelete($class)
     {
-        return !empty(class_uses_recursive($class)[SoftDeletes::class]);
+        return ! empty(class_uses_recursive($class)[SoftDeletes::class]);
     }
 }

@@ -3,12 +3,12 @@
 namespace IvanoMatteo\LaravelScoutFullTextEngine\Scopes\Search;
 
 use Closure;
+use Illuminate\Database\Connection;
 use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Query\Builder;
 use IvanoMatteo\LaravelScoutFullTextEngine\Scopes\BaseScope;
 use RuntimeException;
-use Illuminate\Database\Connection;
 
 class MysqlFullTextScope extends BaseScope
 {
@@ -23,13 +23,11 @@ class MysqlFullTextScope extends BaseScope
     private bool $selectAllIfNoColumn = false;
     private array $columns;
 
-
     public function __construct(Connection $conn, array $columns)
     {
         parent::__construct($conn);
         $this->columns = $columns;
     }
-
 
     public function apply(Builder|EloquentBuilder $q, Model $model)
     {
@@ -66,6 +64,7 @@ class MysqlFullTextScope extends BaseScope
     public function conditionManipulator(Closure $conditionManipulator): static
     {
         $this->conditionManipulator = $conditionManipulator;
+
         return $this;
     }
 
