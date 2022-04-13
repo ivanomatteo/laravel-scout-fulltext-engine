@@ -171,7 +171,7 @@ class FullTextIndexer
         return $q;
     }
 
-    private function applyFulltextCondition(Builder|EloquentBuilder $q, string $search, Model $model, $table = '')
+    public function applyFulltextCondition(Builder|EloquentBuilder $q, string $search, Model $model, $table = '')
     {
         $query_prepared = $search;
 
