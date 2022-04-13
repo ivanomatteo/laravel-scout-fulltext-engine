@@ -70,7 +70,6 @@ class QueryParserMysqlFullTextBool implements QueryParser
         })->merge($extracted)->implode(' ');
     }
 
-
     public function tokenize(string $query): Collection
     {
         $query = str_replace(static::DEF_RESERVED_CHARS, static::DEF_REPLACE_CHARS, $query);
@@ -81,7 +80,6 @@ class QueryParserMysqlFullTextBool implements QueryParser
                 return implode(' ', preg_split("/\\s+/", trim($word)));
             });
     }
-
 
     public function runExtractors(string $tmpQuery): Collection
     {
@@ -95,6 +93,7 @@ class QueryParserMysqlFullTextBool implements QueryParser
                         return $extr['prefix'] . $str . $extr['suffix'];
                     }));
             }, collect());
+
         return $result;
     }
 }
