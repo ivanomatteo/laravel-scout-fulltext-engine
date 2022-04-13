@@ -2,13 +2,10 @@
 
 namespace IvanoMatteo\LaravelScoutFullTextEngine\Models;
 
-use Closure;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\App;
 use IvanoMatteo\LaravelScoutFullTextEngine\FullTextIndexer;
-use IvanoMatteo\LaravelScoutFullTextEngine\Pkg;
-use IvanoMatteo\LaravelScoutFullTextEngine\Scopes\Search\MysqlFullTextScope;
 
 class FullTextEntry extends Model
 {
