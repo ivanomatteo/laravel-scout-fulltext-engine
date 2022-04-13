@@ -2,7 +2,6 @@
 
 namespace IvanoMatteo\LaravelScoutFullTextEngine;
 
-use DASPRiD\Enum\Exception\IllegalArgumentException;
 use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Query\Builder;
@@ -14,6 +13,7 @@ use IvanoMatteo\LaravelScoutFullTextEngine\Models\FullTextEntry;
 use IvanoMatteo\LaravelScoutFullTextEngine\Parsers\Extractors\FeatureExtractor;
 use IvanoMatteo\LaravelScoutFullTextEngine\Parsers\Query\QueryParser;
 use IvanoMatteo\LaravelScoutFullTextEngine\Scopes\Search\MysqlFullTextScope;
+use InvalidArgumentException;
 
 class FullTextIndexer
 {
@@ -21,14 +21,15 @@ class FullTextIndexer
 
     public function addModelToIndex(Model $model): void
     {
-        $stringData = collect($model->toSearchableArray())->flatten()->implode(' ');
+        $data = $model->toSearchableArray(); //@phpstan-ignore-line
+        $stringData = collect($data)->flatten()->implode(' ');
 
         $indexModel = method_exists($model, 'getFullTextEntryModel') ?
             $model->getFullTextEntryModel() : FullTextEntry::class;
 
 
         $indexModel::updateOrCreate([
-            'index_name' => $model->searchableAs(),
+            'index_name' => $model->searchableAs(), //@phpstan-ignore-line
             'model_type' => get_class($model),
             'model_id' => $model->getKey(),
         ], [
@@ -38,7 +39,8 @@ class FullTextIndexer
 
     public function removeModelFromIndex(Model $model): void
     {
-        FullTextEntry::where('index_name', $model->searchableAs())
+        $index_name = $model->searchableAs(); //@phpstan-ignore-line
+        FullTextEntry::where('index_name', $index_name)
             ->where('model_type', get_class($model))
             ->where('model_id', $model->getKey())
             ->delete();
@@ -53,7 +55,7 @@ class FullTextIndexer
 
     private function getDefaultExtractors()
     {
-        if (! isset($this->defaultExtractors)) {
+        if (!isset($this->defaultExtractors)) {
             $this->defaultExtractors = collect(Pkg::configGet('pre_processing.index_data.extractors'))
                 ->map(fn ($extr) => App::make($extr));
         }
@@ -67,7 +69,7 @@ class FullTextIndexer
 
         if (method_exists($model, 'getIndexFeatureExtractors')) {
             $tmp = $model->getIndexFeatureExtractors();
-            if (! empty($tmp)) {
+            if (!empty($tmp)) {
                 $extractors = $tmp;
             }
         }
@@ -104,7 +106,7 @@ class FullTextIndexer
             return $this->searchUsingExists($model, $q, $search);
         }
 
-        throw new IllegalArgumentException('unknown bind_mode:' . $bind_mode);
+        throw new InvalidArgumentException('unknown bind_mode:' . $bind_mode);
     }
 
     private function searchUsingJoin(Model $model, Builder|EloquentBuilder $q, string $search)
@@ -135,7 +137,7 @@ class FullTextIndexer
                 if ($col instanceof \Illuminate\Database\Query\Expression) {
                     return $col;
                 }
-                if (! Str::contains($col, '.')) {
+                if (!Str::contains($col, '.')) {
                     return $model->getTable() . '.' . $col;
                 }
 
@@ -194,13 +196,13 @@ class FullTextIndexer
         if ($connection->getDriverName() === 'mysql') {
             $scope = (new MysqlFullTextScope($connection, ['text']))
                 ->search($options['query_prepared']);
-            if (! empty($options['fulltext_options']['mode'])) {
+            if (!empty($options['fulltext_options']['mode'])) {
                 $scope->inBooleanMode();
             }
-            if (! empty($options['fulltext_options']['order_by_score'])) {
+            if (!empty($options['fulltext_options']['order_by_score'])) {
                 $scope->orderByscore();
             }
-            if (! empty($options['fulltext_options']['add_select_score'])) {
+            if (!empty($options['fulltext_options']['add_select_score'])) {
                 $scope->addSelectScore(true);
             }
             $scope->apply($q, $model);
