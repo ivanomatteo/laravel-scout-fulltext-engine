@@ -92,7 +92,7 @@ return [
                 [
                     // composite name extractor will find words
                     // composed by 1 or 2 characters followed by
-                    // a word longer than 3 characters, for example:
+                    // a word longer than 2 characters, for example:
                     // from "Robert De Niro" --> "De_niro"
                     //
                     // This is useful to overcome fulltext default min-length 
@@ -100,9 +100,11 @@ return [
                     // (but it will work only if used also in index data section)
                     'class' => CompositeNameExtractor::class,
 
-                    'must_match' => false, // true -> will prepend "+", for boolean mode, but depends by the parser class
+                    // true -> will prepend "+", for boolean mode, but depends by the parser class
+                    'must_match' => false, 
                     
-                    'starts_with' => true, // true -> will append "*", for boolean mode, but depends by the parser class
+                    // true -> will append "*", for boolean mode, but depends by the parser class
+                    'starts_with' => true, 
                 ]
             ],
         ],
@@ -163,7 +165,7 @@ class MyModel extends Model
 
 ```
 
-In this way you get:
+In this way you will get:
 - **fullTextEntry()**: relation to indexed table
 - **directSearch()**: scope, that you can use intead of search()
 
