@@ -7,14 +7,13 @@
 
 This package provide a Laravel/Scout Engine based on database/fulltext only, but work in a different way compared to the default database Engine.
 
-You don't need to add fulltext indexes to your tables: the data used for search will be stored in a table with a polimorphyc relation.
+You don't need to add fulltext indexes to your tables: the data used for search will be stored in a table with a polymorphic relation.
 
 This provide several advantages:
 
-- you don't need to alter current tables's schema
+- you don't need to change current tables's schema
 - it's easy to add metadata
-- indexing process can be done in jobs, so it will not slow down inserts in the tables
-
+- indexing process can be deferred in jobs, so it will not slow down database inserts/updates
 
 
 ## Installation
@@ -46,50 +45,70 @@ use IvanoMatteo\LaravelScoutFullTextEngine\Parsers\Extractors\CompositeNameExtra
 use IvanoMatteo\LaravelScoutFullTextEngine\Parsers\Query\QueryParserMysqlFullTextBool;
 
 return [
- 'scount_engine_name' => 'scout-fulltext-engine',
+ 'scout_engine_name' => 'scout-fulltext-engine',
 
     'fulltext_options' => [
 
         'mode' => 'boolean',
 
-        //
-        // join bind mode will try to modify selected columns
-        // adding "model_table.*" if no column was selected
-        // or adding "model_table." prefix to selected columns
-        // in some cases like when using DB::raw() you must be aware that
-        // the query will be a join, and avoid column names collisions
-        //
+        /*
+            Note on bind_mode == 'join': 
+                it will try to modify selected columns by
+                adding "model_table.*" if no column was selected or
+                adding "model_table." prefix to selected columns.
+                In some cases, for example when using DB::raw(), 
+                you must be careful because the query will be a join, 
+                and you have to avoid column names collisions
+        */
         'bind_mode' => 'exists', // 'exists' | 'join'
 
-        // by default fulltext search will return records
-        // orderred by match score, but in case you want
-        // record to be ordered by: match_score, name
-        // is necessary to be explicit
-        //
-        // only supported with bind_mode = 'join'
+        /* 
+            By default fulltext searches will return records
+            ordered by match score: 
+                but in some case you may want the records to be ordered by 
+                multiple fields, for example: match_score, name
+                in these cases is necessary to be explicit
+            !!! only supported with bind_mode = 'join' 
+        */
         'order_by_score' => false,
 
         // this will add a field named 'fulltext_score' to the results.
-        // it can be usefull for tuning fulltext searches
-        //
-        // only supported with bind_mode = 'join'
+        // it can be useful for tuning fulltext searches
+        // !!! only supported with bind_mode = 'join'
         'add_select_score' => false,
     ],
 
+
     'pre_processing' => [
         'query' => [
+            // the parser will process the text passed to 
+            // search function preparing it for the specific 
+            // fulltext query type
             'parser' => QueryParserMysqlFullTextBool::class,
 
+            // extractors will extrapolate metadata from the 
+            // query text 
             'extractors' => [
                 [
+                    // composite name extractor will find words
+                    // composed by 1 or 2 characters followed by
+                    // a word longer than 3 characters, for example:
+                    // from "Robert De Niro" --> "De_niro"
+                    //
+                    // This is useful to overcome fulltext default min-length 
+                    // settings that ignore words < 3 chars 
+                    // (but it will work only if used also in index data section)
                     'class' => CompositeNameExtractor::class,
-                    'must_match' => false,
-                    'starts_with' => true,
+
+                    'must_match' => false, // true -> will prepend "+", for boolean mode, but depends by the parser class
+                    
+                    'starts_with' => true, // true -> will append "*", for boolean mode, but depends by the parser class
                 ]
             ],
         ],
         'index_data' => [
             'extractors' => [
+                //this will add extracted metadata to te index
                 CompositeNameExtractor::class,
             ],
         ],
@@ -100,7 +119,11 @@ return [
 
 ## Storing indexed data in different tables
 
-It's also possible use different tables to store indexed data, simply creating another table with the same structure of "full_text_entries", the model (should extend FullTextEntry), and adding this function to your models:
+It's also possible use different tables to store indexed data: 
+- creating another table with the same structure of "full_text_entries"
+- the model (that should extend FullTextEntry)
+
+and adding this method to your models:
 
 ```php
 public function getFullTextEntryModel()
@@ -112,26 +135,26 @@ public function getFullTextEntryModel()
 
 ## Usage
 
-Simpli configure Laravel Scout to use this driver:
+Simply configure Laravel Scout to use this driver:
 (in your .env file)
 
 ```
 SCOUT_DRIVER=scout-fulltext-engine
 ```
 
-refer to [laravel scout documentation](https://laravel.com/docs/scout) for standard usage.
+and refer to [laravel scout documentation](https://laravel.com/docs/scout) for standard usage.
 
 ## Direct Search Mode
 
 This package also provide a "direct search" mode: 
-you just need to add DirectSearch Trait to your Model.
+you just need to add DirectSearch Trait to your Model:
 
 ```php
 
 use Laravel\Scout\Searchable;
 use IvanoMatteo\LaravelScoutFullTextEngine\Concerns\DirectSearch;
 
-class RubricaDipAnagrafica extends Model
+class MyModel extends Model
 {
     use Searchable;
     use DirectSearch;
@@ -141,12 +164,12 @@ class RubricaDipAnagrafica extends Model
 ```
 
 In this way you get:
-- fullTextEntry() relation to indexed table
-- directSearch() scope, that you can use intead of search()
+- **fullTextEntry()**: relation to indexed table
+- **directSearch()**: scope, that you can use intead of search()
 
-Scout's search() function, returns an instance of Laravel\Scout\Builder that has limited functionalities.
+Scout's **search()** function, returns an instance of **Laravel\Scout\Builder** that has limited functionalities.
 
-directSearch() intead, will return an intance of Illuminate\Database\Eloquent\Builder that allow you to combine with all database query operators as usual.
+**directSearch()** instead, will return an instance of **Illuminate\Database\Eloquent\Builder** that allow you to build your query as usual.
 
 
 

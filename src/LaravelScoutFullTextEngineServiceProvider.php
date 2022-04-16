@@ -57,9 +57,10 @@ class LaravelScoutFullTextEngineServiceProvider extends PackageServiceProvider
         $this->app->singleton(FullTextIndexer::class);
 
         if (class_exists(EngineManager::class)) {
-            $this->app->make(EngineManager::class)->extend(Pkg::configGet('scount_engine_name'), function () {
-                return new ScoutEngine();
-            });
+            $this->app->make(EngineManager::class)
+                ->extend(Pkg::configGet('scout_engine_name'), function () {
+                    return new ScoutEngine();
+                });
         }
     }
 }
