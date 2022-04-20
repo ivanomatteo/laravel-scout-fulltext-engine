@@ -27,14 +27,14 @@ composer require ivanomatteo/laravel-scout-fulltext-engine
 You can publish and run the migrations with:
 
 ```bash
-php artisan vendor:publish --tag="laravel-scout-fulltext-engine-migrations"
+php artisan vendor:publish --tag="scout-fulltext-engine-migrations"
 php artisan migrate
 ```
 
 You can publish the config file with:
 
 ```bash
-php artisan vendor:publish --tag="laravel-scout-fulltext-engine-config"
+php artisan vendor:publish --tag="scout-fulltext-engine-config"
 ```
 
 This is the contents of the published config file:
