@@ -3,8 +3,8 @@
 namespace IvanoMatteo\LaravelScoutFullTextEngine\Parsers\Query;
 
 use Illuminate\Support\Collection;
-use IvanoMatteo\LaravelScoutFullTextEngine\Parsers\Extractors\FeatureExtractor;
 use Illuminate\Support\Str;
+use IvanoMatteo\LaravelScoutFullTextEngine\Parsers\Extractors\FeatureExtractor;
 
 class QueryParserMysqlFullTextBool implements QueryParser
 {
