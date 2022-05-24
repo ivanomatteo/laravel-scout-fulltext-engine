@@ -28,7 +28,19 @@ class ScoutEngine extends Engine
      */
     public function update($models)
     {
-        $models->each(fn ($m) => $this->ftindexer->addModelToIndex($m));
+        $count = $models->count();
+        if ($count === 0) {
+            return;
+        }
+        $connection = $models->first()->getConnection();
+
+        if ($count > 1 && $connection->transactionLevel() === 0) {
+            $connection->transaction(
+                fn () => $models->each(fn ($m) => $this->ftindexer->addModelToIndex($m))
+            );
+        } else {
+            $models->each(fn ($m) => $this->ftindexer->addModelToIndex($m));
+        }
     }
 
     /**
@@ -39,7 +51,20 @@ class ScoutEngine extends Engine
      */
     public function delete($models)
     {
-        $models->each(fn ($m) => $this->ftindexer->removeModelFromIndex($m));
+        $count = $models->count();
+
+        if ($count === 0) {
+            return;
+        }
+        $connection = $models->first()->getConnection();
+
+        if ($count > 1 && $connection->transactionLevel() === 0) {
+            $connection->transaction(
+                fn () => $models->each(fn ($m) => $this->ftindexer->removeModelFromIndex($m))
+            );
+        } else {
+            $models->each(fn ($m) => $this->ftindexer->removeModelFromIndex($m));
+        }
     }
 
     /**
@@ -191,6 +216,6 @@ class ScoutEngine extends Engine
 
     private static function usesSoftDelete($class)
     {
-        return ! empty(class_uses_recursive($class)[SoftDeletes::class]);
+        return !empty(class_uses_recursive($class)[SoftDeletes::class]);
     }
 }
