@@ -4,7 +4,7 @@ namespace IvanoMatteo\LaravelScoutFullTextEngine\Parsers\Query;
 
 use Illuminate\Support\Collection;
 use IvanoMatteo\LaravelScoutFullTextEngine\Parsers\Extractors\FeatureExtractor;
-use Str;
+use Illuminate\Support\Str;
 
 class QueryParserMysqlFullTextBool implements QueryParser
 {
