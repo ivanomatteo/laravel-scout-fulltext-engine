@@ -19,6 +19,11 @@ class FullTextIndexer
 {
     private ?Collection $defaultExtractors = null;
 
+    private function getModelType(Model $model)
+    {
+        return method_exists($model, 'getModelType') ? $model->getModelType() : get_class($model);
+    }
+
     public function addModelToIndex(Model $model): void
     {
         $data = $model->toSearchableArray(); //@phpstan-ignore-line
@@ -31,7 +36,7 @@ class FullTextIndexer
 
         $indexModel::updateOrCreate([
             'index_name' => $index_name,
-            'model_type' => get_class($model),
+            'model_type' => $this->getModelType($model),
             'model_id' => $model->getKey(),
         ], [
             'text' => $this->runExtractors($model, $stringData),
@@ -42,21 +47,21 @@ class FullTextIndexer
     {
         $index_name = $model->searchableAs(); //@phpstan-ignore-line
         FullTextEntry::where('index_name', $index_name)
-            ->where('model_type', get_class($model))
+            ->where('model_type', $this->getModelType($model))
             ->where('model_id', $model->getKey())
             ->delete();
     }
 
     public function flushModel(Model $model): void
     {
-        FullTextEntry::where('model_type', get_class($model))
+        FullTextEntry::where('model_type', $this->getModelType($model))
             ->where('model_id', $model->getKey())
             ->delete();
     }
 
     private function getDefaultExtractors()
     {
-        if (! isset($this->defaultExtractors)) {
+        if (!isset($this->defaultExtractors)) {
             $this->defaultExtractors = collect(Pkg::configGet('pre_processing.index_data.extractors'))
                 ->map(fn ($extr) => App::make($extr));
         }
@@ -70,7 +75,7 @@ class FullTextIndexer
 
         if (method_exists($model, 'getIndexFeatureExtractors')) {
             $tmp = $model->getIndexFeatureExtractors();
-            if (! empty($tmp)) {
+            if (!empty($tmp)) {
                 $extractors = $tmp;
             }
         }
@@ -126,7 +131,7 @@ class FullTextIndexer
             )->on(
                 "$relatedTable.model_type",
                 '=',
-                DB::raw(DB::getPdo()->quote(get_class($model)))
+                DB::raw(DB::getPdo()->quote($this->getModelType($model)))
             )->where(
                 "$relatedTable.index_name",
                 '=',
@@ -140,7 +145,7 @@ class FullTextIndexer
                 if ($col instanceof \Illuminate\Database\Query\Expression) {
                     return $col;
                 }
-                if (! Str::contains($col, '.')) {
+                if (!Str::contains($col, '.')) {
                     return $model->getTable() . '.' . $col;
                 }
 
@@ -168,7 +173,7 @@ class FullTextIndexer
             $q->select(DB::raw(1))
                 ->from($relatedTable)
                 ->whereColumn($relatedTable . '.model_id', $model->getTable() . '.id')
-                ->where($relatedTable . '.model_type', get_class($model))
+                ->where($relatedTable . '.model_type', $this->getModelType($model))
                 ->where('index_name', $index_name);
 
             $this->applyFulltextCondition($q, $search, $model);
@@ -200,13 +205,13 @@ class FullTextIndexer
         if ($connection->getDriverName() === 'mysql') {
             $scope = (new MysqlFullTextScope($connection, ['text']))
                 ->search($options['query_prepared']);
-            if (! empty($options['fulltext_options']['mode'])) {
+            if (!empty($options['fulltext_options']['mode'])) {
                 $scope->inBooleanMode();
             }
-            if (! empty($options['fulltext_options']['order_by_score'])) {
+            if (!empty($options['fulltext_options']['order_by_score'])) {
                 $scope->orderByscore();
             }
-            if (! empty($options['fulltext_options']['add_select_score'])) {
+            if (!empty($options['fulltext_options']['add_select_score'])) {
                 $scope->addSelectScore(true);
             }
             $scope->apply($q, $model);
