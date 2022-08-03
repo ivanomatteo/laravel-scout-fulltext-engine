@@ -21,7 +21,7 @@ class FullTextIndexer
 
     private function getModelType(Model $model)
     {
-        return method_exists($model, 'getModelType') ? $model->getModelType() : get_class($model);
+        return method_exists($model, 'getModelTypeForSearch') ? $model->getModelType() : get_class($model);
     }
 
     public function addModelToIndex(Model $model): void
