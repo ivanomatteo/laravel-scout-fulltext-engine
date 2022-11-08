@@ -87,7 +87,7 @@ class FullTextIndexer
         $extracted = $extractors->reduce(function ($carry, FeatureExtractor $extr) use ($stringData) {
             $tmp = trim(implode(' ', $extr->extract($stringData)));
             if ($tmp) {
-                $carry = ' ' . $tmp;
+                $carry .= ' ' . $tmp;
             }
 
             return $carry;
