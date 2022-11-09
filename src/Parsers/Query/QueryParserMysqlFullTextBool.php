@@ -88,6 +88,7 @@ class QueryParserMysqlFullTextBool implements QueryParser
     {
         return $tokens->map(function (string $word) {
             $word = trim(str_replace('.', '', $word));
+
             return $word;
         });
     }
@@ -101,6 +102,7 @@ class QueryParserMysqlFullTextBool implements QueryParser
             if ($this->matchAll) {
                 $word = '+' . $word;
             }
+
             return $word;
         });
     }
