@@ -1,7 +1,6 @@
 <?php
+
 namespace IvanoMatteo\LaravelScoutFullTextEngine\Parsers\Extractors;
-
-
 
 class DottedWordsExtractor implements FeatureExtractor
 {
