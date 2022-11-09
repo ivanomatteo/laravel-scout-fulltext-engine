@@ -47,20 +47,14 @@ class QueryParserMysqlFullTextBool implements QueryParser
 
     public function parseSearchText(string $query): string
     {
-        $tmpTokens = $this->tokenize($query);
+        $tokens = $this->tokenize($query);
 
-        $extracted = $this->runExtractors($tmpTokens->implode(' '));
+        $extracted = $this->runExtractors($tokens->implode(' '));
 
-        return $tmpTokens->map(function (string $word) {
-            if ($this->startsWith) {
-                $word = $word . '*';
-            }
-            if ($this->matchAll) {
-                $word = '+' . $word;
-            }
+        $tokens = $this->filterTokens($tokens);
+        $tokens = $this->addQuantizers($tokens);
 
-            return $word;
-        })->merge($extracted)->implode(' ');
+        return $tokens->merge($extracted)->implode(' ');
     }
 
     public function tokenize(string $query): Collection
@@ -68,7 +62,7 @@ class QueryParserMysqlFullTextBool implements QueryParser
         $query = str_replace(static::DEF_RESERVED_CHARS, ' ', $query);
 
         return collect(preg_split("/\\s+/", Str::transliterate(trim($query))))
-            ->filter(fn ($str) => (trim($str) !== '' && $str !== null))
+            ->filter(fn ($str) => ($str !== null && trim($str) !== ''))
             ->map(function ($word) {
                 return implode(' ', preg_split("/\\s+/", trim($word)));
             });
@@ -88,5 +82,26 @@ class QueryParserMysqlFullTextBool implements QueryParser
             }, collect());
 
         return $result;
+    }
+
+    public function filterTokens(Collection $tokens): Collection
+    {
+        return $tokens->map(function (string $word) {
+            $word = trim(str_replace('.', '', $word));
+            return $word;
+        });
+    }
+
+    public function addQuantizers(Collection $tokens): Collection
+    {
+        return $tokens->map(function (string $word) {
+            if ($this->startsWith) {
+                $word = $word . '*';
+            }
+            if ($this->matchAll) {
+                $word = '+' . $word;
+            }
+            return $word;
+        });
     }
 }
