@@ -1,6 +1,7 @@
 <?php
 
 use IvanoMatteo\LaravelScoutFullTextEngine\Parsers\Extractors\CompositeNameExtractor;
+use IvanoMatteo\LaravelScoutFullTextEngine\Parsers\Extractors\DottedWordsExtractor;
 use IvanoMatteo\LaravelScoutFullTextEngine\Parsers\Query\QueryParserMysqlFullTextBool;
 
 return [
@@ -46,29 +47,35 @@ return [
             // fulltext query type
             'parser' => QueryParserMysqlFullTextBool::class,
 
-            // extractors will extrapolate metadata from the
-            // query text
+            // Extractors will extrapolate metadata from the query text
+         
             'extractors' => [
+                [
+                    // useful to match dotted words
+                    // must be used also in index_data section
+                    // "N.A.S.A"  --extract--> [ "NASA", "N_A_S_A" ]
+                    'class' => DottedWordsExtractor::class,
+                    'must_match' => false, // true -> will prepend "+", for boolean mode, but depends by the parser class
+                    'starts_with' => true, // true -> will append "*", for boolean mode, but depends by the parser class
+                ],
                 [
                     // composite name extractor will find words
                     // composed by 1 or 2 characters followed by
                     // a word longer than 3 characters, for example:
-                    // from "Robert De Niro" --> "De_niro"
-                    //
-                    // This is useful to overcome fulltext default min-length
-                    // settings that ignore words < 3 chars
+                    // from "Robert De Niro" --extract--> [ "De_niro" ]
+                    // this is useful to overcome fulltext default words min-length (3 chars)
                     // (but it will work only if used also in index data section)
                     'class' => CompositeNameExtractor::class,
-
-                    'must_match' => false, // true -> will prepend "+", for boolean mode, but depends by the parser class
-
-                    'starts_with' => true, // true -> will append "*", for boolean mode, but depends by the parser class
+                    'must_match' => false,
+                    'starts_with' => true,
                 ]
             ],
         ],
+
         'index_data' => [
             'extractors' => [
                 //this will add extracted metadata to te index
+                DottedWordsExtractor::class,
                 CompositeNameExtractor::class,
             ],
         ],
