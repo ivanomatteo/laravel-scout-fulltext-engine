@@ -88,6 +88,7 @@ class QueryParserMysqlFullTextBool implements QueryParser
                 return collect(preg_split("/[\\s[:punct:]]+/", $word))
                     ->filter(fn ($s) => (strlen($s) > 2));
             }
+
             return $word;
         })->flatten();
     }
