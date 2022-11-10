@@ -84,11 +84,13 @@ class QueryParserMysqlFullTextBool implements QueryParser
         return $tokens->map(function (string $word) {
 
             if (Str::contains($word, static::DEF_RESERVED_CHARS)) {
-                $word = '"' . trim(str_replace('"', ' ', $word)) . '"';
+                return '"' . trim(str_replace('"', ' ', $word)) . '"';
+            } else {
+                return collect(preg_split("/[\\s[:punct:]]+/", $word))
+                    ->filter(fn ($s) => (strlen($s) > 2));
             }
-
             return $word;
-        });
+        })->flatten();
     }
 
     public function addQuantizers(Collection $tokens): Collection
