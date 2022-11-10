@@ -16,7 +16,9 @@ class DottedWordsExtractor implements FeatureExtractor
             return trim(preg_replace('/\.+/', '_', $word));
         });
 
-        $words = $removed->merge($undescore)->unique()->toArray();
+        $words = $removed->merge($undescore)
+            ->filter(fn ($str) => (strlen($str) > 2))
+            ->unique()->toArray();
 
         return $words;
     }

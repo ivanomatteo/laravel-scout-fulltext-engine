@@ -59,13 +59,8 @@ class QueryParserMysqlFullTextBool implements QueryParser
 
     public function tokenize(string $query): Collection
     {
-        $query = str_replace(static::DEF_RESERVED_CHARS, ' ', $query);
-
-        return collect(preg_split("/\\s+/", Str::transliterate(trim($query))))
-            ->filter(fn ($str) => ($str !== null && trim($str) !== ''))
-            ->map(function ($word) {
-                return implode(' ', preg_split("/\\s+/", trim($word)));
-            });
+        return collect(preg_split("/\\s+/", trim(Str::transliterate($query))))
+            ->filter(fn ($str) => ($str !== null && trim($str) !== ''));
     }
 
     public function runExtractors(string $tmpQuery): Collection
@@ -87,7 +82,10 @@ class QueryParserMysqlFullTextBool implements QueryParser
     public function filterTokens(Collection $tokens): Collection
     {
         return $tokens->map(function (string $word) {
-            $word = trim(str_replace('.', '', $word));
+
+            if (Str::contains($word, static::DEF_RESERVED_CHARS)) {
+                $word = '"' . trim(str_replace('"', ' ', $word)) . '"';
+            }
 
             return $word;
         });
@@ -96,9 +94,11 @@ class QueryParserMysqlFullTextBool implements QueryParser
     public function addQuantizers(Collection $tokens): Collection
     {
         return $tokens->map(function (string $word) {
-            if ($this->startsWith) {
+
+            if ($this->startsWith && !Str::endsWith($word, '"')) {
                 $word = $word . '*';
             }
+
             if ($this->matchAll) {
                 $word = '+' . $word;
             }
