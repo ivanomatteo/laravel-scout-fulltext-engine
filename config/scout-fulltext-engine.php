@@ -37,6 +37,18 @@ return [
         // it can be useful for tuning fulltext searches
         // !!! only supported with bind_mode = 'join'
         'add_select_score' => false,
+
+        /*
+        |--------------------------------------------------------------------------
+        | Default minimum search word length
+        |--------------------------------------------------------------------------
+        |
+        | This option controls the default minimum search word length. Be sure to match
+        | this to the length you have set in your MySQL / MariaDB configuration. The
+        | default value for the MySQL / MariaDB search word length is 4 characters.
+        |
+        */
+        'ft_min_word_len' => 3
     ],
 
 
@@ -48,7 +60,7 @@ return [
             'parser' => QueryParserMysqlFullTextBool::class,
 
             // Extractors will extrapolate metadata from the query text
-         
+
             'extractors' => [
                 [
                     // useful to match dotted words
