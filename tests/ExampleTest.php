@@ -9,10 +9,35 @@ it('can test', function () {
 
 
 it('can parse fulltext query', function () {
+
     $p = new QueryParserMysqlFullTextBool();
+
     $p->addExtractor(new CompositeNameExtractor('_'), true, true);
 
-    $parsed = $p->parseSearchText('foò\' ba@r baz l\' acquila l\' acquila l\'acqua jisji sjij jijiiji de rossi');
+    $search = 'foò\' ba@r baz l\' acquila l\' acquila l\'acqua jisji sjij jijiiji de rossi';
+
+    /* 
+    $tokenized = $p->tokenize($search);
+
+    dump('tokenized', $tokenized->toArray());
+
+    $filtered = $p->filterTokens($tokenized);
+
+    dump('filtered', $filtered->toArray());
+
+    $quantized = $p->addQuantizers($filtered);
+
+    dump('quantized', $quantized->toArray());
+
+    $extracted = $p->runExtractors($tokenized->implode(' '));
+
+    dump('extracted', $extracted->toArray()); 
+    */
+
+
+    $parsed = $p->parseSearchText($search);
+
+    //dump('parsed', $parsed);
 
     expect($parsed)->toContain('l_acquila');
 });

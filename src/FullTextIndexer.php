@@ -187,7 +187,7 @@ class FullTextIndexer
         $query_prepared = $search;
 
         if (method_exists($model, 'prepareFullTextQuery')) {
-            $query_prepared = $model->prepareFullTextQuery();
+            $query_prepared = $model->prepareFullTextQuery($search);
         } elseif (App::bound(QueryParser::class)) {
             /** @var QueryParser */
             $parser = App::make(QueryParser::class);
