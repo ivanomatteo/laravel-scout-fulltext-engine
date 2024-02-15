@@ -16,7 +16,7 @@ it('can parse fulltext query', function () {
 
     $search = 'foò\' ba@r baz l\' acquila l\' acquila l\'acqua jisji sjij jijiiji de rossi';
 
-    /* 
+    /*
     $tokenized = $p->tokenize($search);
 
     dump('tokenized', $tokenized->toArray());
@@ -31,7 +31,7 @@ it('can parse fulltext query', function () {
 
     $extracted = $p->runExtractors($tokenized->implode(' '));
 
-    dump('extracted', $extracted->toArray()); 
+    dump('extracted', $extracted->toArray());
     */
 
 
