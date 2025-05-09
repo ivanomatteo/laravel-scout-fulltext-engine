@@ -28,6 +28,6 @@ class Pkg
 
     public static function configKey(string $key): mixed
     {
-        return static::getShortName() . ".$key";
+        return static::getShortName().".$key";
     }
 }

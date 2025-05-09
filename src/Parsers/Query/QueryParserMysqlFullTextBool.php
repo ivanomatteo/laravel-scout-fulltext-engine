@@ -9,16 +9,16 @@ use IvanoMatteo\LaravelScoutFullTextEngine\Parsers\Extractors\FeatureExtractor;
 class QueryParserMysqlFullTextBool implements QueryParser
 {
     private bool $matchAll = false;
+
     private bool $startsWith = false;
+
     private array $extractors = [];
 
     public const DEF_RESERVED_CHARS = [
         '-', '+', '<', '>', '@', '(', ')', '~', '"', "'",
     ];
 
-    public function __construct()
-    {
-    }
+    public function __construct() {}
 
     public function addExtractor(FeatureExtractor $extractor, bool $mustMatch = false, bool $startsWith = false): static
     {
@@ -59,8 +59,8 @@ class QueryParserMysqlFullTextBool implements QueryParser
 
     public function tokenize(string $query): Collection
     {
-        return collect(preg_split("/\\s+/", trim(Str::transliterate($query))))
-            ->filter(fn ($str) => ($str !== null && trim($str) !== ''));
+        return collect(preg_split('/\\s+/', trim(Str::transliterate($query))))
+            ->filter(fn ($str) => (trim($str) !== ''));
     }
 
     public function runExtractors(string $tmpQuery): Collection
@@ -72,7 +72,7 @@ class QueryParserMysqlFullTextBool implements QueryParser
 
                 return $carry->merge(collect($tmp_extracted)
                     ->map(function (string $str) use ($extr) {
-                        return $extr['prefix'] . $str . $extr['suffix'];
+                        return $extr['prefix'].$str.$extr['suffix'];
                     }));
             }, collect());
 
@@ -83,9 +83,9 @@ class QueryParserMysqlFullTextBool implements QueryParser
     {
         return $tokens->map(function (string $word) {
             if (Str::contains($word, static::DEF_RESERVED_CHARS)) {
-                return '"' . trim(str_replace('"', ' ', $word)) . '"';
+                return '"'.trim(str_replace('"', ' ', $word)).'"';
             } else {
-                return collect(preg_split("/[\\s[:punct:]]+/", $word))
+                return collect(preg_split('/[\\s[:punct:]]+/', $word))
                     ->filter(fn ($s) => (strlen($s) > 2));
             }
         })->flatten();
@@ -95,11 +95,11 @@ class QueryParserMysqlFullTextBool implements QueryParser
     {
         return $tokens->map(function (string $word) {
             if ($this->startsWith && ! Str::endsWith($word, '"')) {
-                $word = $word . '*';
+                $word = $word.'*';
             }
 
             if ($this->matchAll) {
-                $word = '+' . $word;
+                $word = '+'.$word;
             }
 
             return $word;

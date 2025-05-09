@@ -7,10 +7,9 @@ it('can test', function () {
     expect(true)->toBeTrue();
 });
 
-
 it('can parse fulltext query', function () {
 
-    $p = new QueryParserMysqlFullTextBool();
+    $p = new QueryParserMysqlFullTextBool;
 
     $p->addExtractor(new CompositeNameExtractor('_'), true, true);
 
@@ -34,10 +33,9 @@ it('can parse fulltext query', function () {
     dump('extracted', $extracted->toArray());
     */
 
-
     $parsed = $p->parseSearchText($search);
 
-    //dump('parsed', $parsed);
+    // dump('parsed', $parsed);
 
     expect($parsed)->toContain('l_acquila');
 });

@@ -39,7 +39,6 @@ return [
         'add_select_score' => false,
     ],
 
-
     'pre_processing' => [
         'query' => [
             // the parser will process the text passed to
@@ -48,7 +47,7 @@ return [
             'parser' => QueryParserMysqlFullTextBool::class,
 
             // Extractors will extrapolate metadata from the query text
-         
+
             'extractors' => [
                 [
                     // useful to match dotted words
@@ -68,18 +67,17 @@ return [
                     'class' => CompositeNameExtractor::class,
                     'must_match' => false,
                     'starts_with' => true,
-                ]
+                ],
             ],
         ],
 
         'index_data' => [
             'extractors' => [
-                //this will add extracted metadata to te index
+                // this will add extracted metadata to te index
                 DottedWordsExtractor::class,
                 CompositeNameExtractor::class,
             ],
         ],
     ],
-
 
 ];

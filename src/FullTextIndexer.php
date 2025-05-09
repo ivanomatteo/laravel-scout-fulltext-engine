@@ -26,13 +26,13 @@ class FullTextIndexer
 
     public function addModelToIndex(Model $model): void
     {
-        $data = $model->toSearchableArray(); //@phpstan-ignore-line
+        $data = $model->toSearchableArray(); // @phpstan-ignore-line
         $stringData = collect($data)->flatten()->implode(' ');
 
         $indexModel = method_exists($model, 'getFullTextEntryModel') ?
             $model->getFullTextEntryModel() : FullTextEntry::class;
 
-        $index_name = $model->searchableAs(); //@phpstan-ignore-line
+        $index_name = $model->searchableAs(); // @phpstan-ignore-line
 
         $indexModel::updateOrCreate([
             'index_name' => $index_name,
@@ -45,7 +45,7 @@ class FullTextIndexer
 
     public function removeModelFromIndex(Model $model): void
     {
-        $index_name = $model->searchableAs(); //@phpstan-ignore-line
+        $index_name = $model->searchableAs(); // @phpstan-ignore-line
         FullTextEntry::where('index_name', $index_name)
             ->where('model_type', $this->getModelType($model))
             ->where('model_id', $model->getKey())
@@ -87,14 +87,14 @@ class FullTextIndexer
         $extracted = $extractors->reduce(function ($carry, FeatureExtractor $extr) use ($stringData) {
             $tmp = trim(implode(' ', $extr->extract($stringData)));
             if ($tmp) {
-                $carry .= ' ' . $tmp;
+                $carry .= ' '.$tmp;
             }
 
             return $carry;
         }, '');
 
         if ($extracted) {
-            $stringData .= ' ' . $extracted;
+            $stringData .= ' '.$extracted;
         }
 
         return $stringData;
@@ -112,7 +112,7 @@ class FullTextIndexer
             return $this->searchUsingExists($model, $q, $search);
         }
 
-        throw new InvalidArgumentException('unknown bind_mode:' . $bind_mode);
+        throw new InvalidArgumentException('unknown bind_mode:'.$bind_mode);
     }
 
     private function searchUsingJoin(Model $model, Builder|EloquentBuilder $q, string $search)
@@ -120,12 +120,12 @@ class FullTextIndexer
         $relatedModel = method_exists($model, 'getFullTextEntryModel') ?
             $model->getFullTextEntryModel() : FullTextEntry::class;
 
-        $relatedTable = (new $relatedModel())->getTable();
+        $relatedTable = (new $relatedModel)->getTable();
         $q->join($relatedTable, function ($join) use ($model, $relatedTable) {
-            $index_name = $model->searchableAs(); //@phpstan-ignore-line
+            $index_name = $model->searchableAs(); // @phpstan-ignore-line
 
             $join->on(
-                $model->getTable() . '.' . $model->getKeyName(),
+                $model->getTable().'.'.$model->getKeyName(),
                 '=',
                 "$relatedTable.model_id"
             )->on(
@@ -139,21 +139,20 @@ class FullTextIndexer
             );
         });
 
-
         $q->select(collect($q->getQuery()->columns)
             ->map(function ($col) use ($model) {
                 if ($col instanceof \Illuminate\Database\Query\Expression) {
                     return $col;
                 }
                 if (! Str::contains($col, '.')) {
-                    return $model->getTable() . '.' . $col;
+                    return $model->getTable().'.'.$col;
                 }
 
                 return $col;
             })->toArray());
 
         if (empty($q->getQuery()->columns)) {
-            $q->select($model->getTable() . '.*');
+            $q->select($model->getTable().'.*');
         }
 
         $this->applyFulltextCondition($q, $search, $model, $relatedTable);
@@ -166,14 +165,14 @@ class FullTextIndexer
         $relatedModel = method_exists($model, 'getFullTextEntryModel') ?
             $model->getFullTextEntryModel() : FullTextEntry::class;
 
-        $relatedTable = (new $relatedModel())->getTable();
+        $relatedTable = (new $relatedModel)->getTable();
 
         $q->whereExists(function ($q) use ($relatedTable, $model, $search) {
-            $index_name = $model->searchableAs(); //@phpstan-ignore-line
+            $index_name = $model->searchableAs(); // @phpstan-ignore-line
             $q->select(DB::raw(1))
                 ->from($relatedTable)
-                ->whereColumn($relatedTable . '.model_id', $model->getTable() . '.id')
-                ->where($relatedTable . '.model_type', $this->getModelType($model))
+                ->whereColumn($relatedTable.'.model_id', $model->getTable().'.id')
+                ->where($relatedTable.'.model_type', $this->getModelType($model))
                 ->where('index_name', $index_name);
 
             $this->applyFulltextCondition($q, $search, $model);
@@ -217,7 +216,7 @@ class FullTextIndexer
             $scope->apply($q, $model);
         } else {
             $q->whereFullText(
-                ($table ? "$table." : '') . 'text',
+                ($table ? "$table." : '').'text',
                 $options['query_prepared'],
                 $options['fulltext_options']
             );
