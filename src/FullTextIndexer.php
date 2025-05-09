@@ -120,7 +120,7 @@ class FullTextIndexer
         $relatedModel = method_exists($model, 'getFullTextEntryModel') ?
             $model->getFullTextEntryModel() : FullTextEntry::class;
 
-        $relatedTable = (new $relatedModel)->getTable();
+        $relatedTable = (new $relatedModel())->getTable();
         $q->join($relatedTable, function ($join) use ($model, $relatedTable) {
             $index_name = $model->searchableAs(); // @phpstan-ignore-line
 
@@ -165,7 +165,7 @@ class FullTextIndexer
         $relatedModel = method_exists($model, 'getFullTextEntryModel') ?
             $model->getFullTextEntryModel() : FullTextEntry::class;
 
-        $relatedTable = (new $relatedModel)->getTable();
+        $relatedTable = (new $relatedModel())->getTable();
 
         $q->whereExists(function ($q) use ($relatedTable, $model, $search) {
             $index_name = $model->searchableAs(); // @phpstan-ignore-line
