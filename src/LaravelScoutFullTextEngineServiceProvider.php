@@ -28,11 +28,11 @@ class LaravelScoutFullTextEngineServiceProvider extends PackageServiceProvider
     public function bootingPackage()
     {
         $this->app->singleton(CompositeNameExtractor::class, function ($app) {
-            return new CompositeNameExtractor();
+            return new CompositeNameExtractor;
         });
 
         $this->app->singleton(QueryParserMysqlFullTextBool::class, function ($app) {
-            $p = (new QueryParserMysqlFullTextBool())
+            $p = (new QueryParserMysqlFullTextBool)
                 ->matchAll()
                 ->startsWith();
 
@@ -59,7 +59,7 @@ class LaravelScoutFullTextEngineServiceProvider extends PackageServiceProvider
         if (class_exists(EngineManager::class)) {
             $this->app->make(EngineManager::class)
                 ->extend(Pkg::configGet('scout_engine_name'), function () {
-                    return new ScoutEngine();
+                    return new ScoutEngine;
                 });
         }
     }

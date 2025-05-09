@@ -9,8 +9,7 @@ class CompositeNameExtractor implements FeatureExtractor
         private int $minPrefixLen = 1,
         private int $maxPrefixLen = 2,
         private int $minSuffixLen = 3,
-    ) {
-    }
+    ) {}
 
     public function extract($searchText): array
     {
