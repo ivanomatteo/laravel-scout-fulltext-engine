@@ -9,7 +9,7 @@ it('can test', function () {
 
 it('can parse fulltext query', function () {
 
-    $p = new QueryParserMysqlFullTextBool();
+    $p = new QueryParserMysqlFullTextBool;
 
     $p->addExtractor(new CompositeNameExtractor('_'), true, true);
 

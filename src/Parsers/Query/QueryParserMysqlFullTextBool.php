@@ -18,9 +18,7 @@ class QueryParserMysqlFullTextBool implements QueryParser
         '-', '+', '<', '>', '@', '(', ')', '~', '"', "'",
     ];
 
-    public function __construct()
-    {
-    }
+    public function __construct() {}
 
     public function addExtractor(FeatureExtractor $extractor, bool $mustMatch = false, bool $startsWith = false): static
     {
