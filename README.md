@@ -1,8 +1,8 @@
 # A scout DB fulltext-based driver that store index data in related tables
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/ivanomatteo/laravel-scout-fulltext-engine.svg?style=flat-square)](https://packagist.org/packages/ivanomatteo/laravel-scout-fulltext-engine)
-[![GitHub Tests Action Status](https://img.shields.io/github/workflow/status/ivanomatteo/laravel-scout-fulltext-engine/run-tests?label=tests)](https://github.com/ivanomatteo/laravel-scout-fulltext-engine/actions?query=workflow%3Arun-tests+branch%3Amain)
-[![GitHub Code Style Action Status](https://img.shields.io/github/workflow/status/ivanomatteo/laravel-scout-fulltext-engine/Check%20&%20fix%20styling?label=code%20style)](https://github.com/ivanomatteo/laravel-scout-fulltext-engine/actions?query=workflow%3A"Check+%26+fix+styling"+branch%3Amain)
+[![GitHub Tests Action Status](https://img.shields.io/github/actions/workflow/status/ivanomatteo/laravel-scout-fulltext-engine/run-tests.yml?branch=main&label=tests)](https://github.com/ivanomatteo/laravel-scout-fulltext-engine/actions?query=workflow%3Arun-tests+branch%3Amain)
+[![GitHub Code Style Action Status](https://img.shields.io/github/actions/workflow/status/ivanomatteo/laravel-scout-fulltext-engine/php-cs-fixer.yml?label=code%20style)](https://github.com/ivanomatteo/laravel-scout-fulltext-engine/actions?query=workflow%3A"Check+%26+fix+styling"+branch%3Amain)
 [![Total Downloads](https://img.shields.io/packagist/dt/ivanomatteo/laravel-scout-fulltext-engine.svg?style=flat-square)](https://packagist.org/packages/ivanomatteo/laravel-scout-fulltext-engine)
 
 This package provide a Laravel/Scout Engine based on database/fulltext only, but work in a different way compared to the default database Engine.
