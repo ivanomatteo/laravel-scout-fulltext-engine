@@ -48,7 +48,7 @@ return [
         | default value for the MySQL / MariaDB search word length is 4 characters.
         |
         */
-        'ft_min_word_len' => 3
+        'ft_min_word_len' => 3,
     ],
 
     'pre_processing' => [

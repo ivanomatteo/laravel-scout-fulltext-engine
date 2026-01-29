@@ -87,7 +87,7 @@ class QueryParserMysqlFullTextBool implements QueryParser
             if (Str::contains($word, static::DEF_RESERVED_CHARS)) {
                 return '"'.trim(str_replace('"', ' ', $word)).'"';
             } else {
-                return collect(preg_split("/[\\s[:punct:]]+/", $word))
+                return collect(preg_split('/[\\s[:punct:]]+/', $word))
                     ->filter(fn ($s) => (strlen($s) >= $minlength));
             }
         })->flatten();
