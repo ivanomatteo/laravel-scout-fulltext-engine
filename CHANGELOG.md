@@ -2,6 +2,10 @@
 
 All notable changes to `laravel-scout-fulltext-engine` will be documented in this file.
 
+## 0.2.1 - 2026-01-29
+
+added min lenght
+
 ## 0.1.12 - 2022-11-10
 
 0.1.12
