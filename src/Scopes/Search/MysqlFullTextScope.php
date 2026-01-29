@@ -13,14 +13,17 @@ use RuntimeException;
 class MysqlFullTextScope extends BaseScope
 {
     private ?string $searchText = null;
-    private string $mode = 'in natural language mode';
 
+    private string $mode = 'in natural language mode';
 
     private ?Closure $conditionManipulator = null;
 
     private bool $addSelectScore = false;
+
     private bool $orderByScore = false;
+
     private bool $selectAllIfNoColumn = false;
+
     private array $columns;
 
     public function __construct(Connection $conn, array $columns)
@@ -89,9 +92,9 @@ class MysqlFullTextScope extends BaseScope
             throw new RuntimeException('searchText not specified');
         }
 
-        $sqlCond = "MATCH (" . implode(', ', $this->escapeColumns($this->columns)) . ") AGAINST (" .
+        $sqlCond = 'MATCH ('.implode(', ', $this->escapeColumns($this->columns)).') AGAINST ('.
             $this->quote($this->searchText)
-            . " {$this->mode} )";
+            ." {$this->mode} )";
 
         if ($this->conditionManipulator) {
             return ($this->conditionManipulator)($sqlCond, $this->searchText);

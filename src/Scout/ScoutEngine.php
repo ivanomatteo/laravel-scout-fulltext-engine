@@ -70,7 +70,6 @@ class ScoutEngine extends Engine
     /**
      * Perform the given search on the engine.
      *
-     * @param  \Laravel\Scout\Builder  $builder
      * @return mixed
      */
     public function search(Builder $builder)
@@ -94,9 +93,9 @@ class ScoutEngine extends Engine
 
         if ($withTrashed && $this->usesSoftDelete($model)) {
             if ($withTrashed === 1) {
-                $q->onlyTrashed(); //@phpstan-ignore-line
+                $q->onlyTrashed(); // @phpstan-ignore-line
             } else {
-                $q->withTrashed(); //@phpstan-ignore-line
+                $q->withTrashed(); // @phpstan-ignore-line
             }
         }
 
@@ -114,7 +113,6 @@ class ScoutEngine extends Engine
     /**
      * Perform the given search on the engine.
      *
-     * @param  \Laravel\Scout\Builder  $builder
      * @param  int  $perPage
      * @param  int  $page
      * @return mixed
@@ -139,7 +137,6 @@ class ScoutEngine extends Engine
     /**
      * Map the given results to instances of the given model.
      *
-     * @param  \Laravel\Scout\Builder  $builder
      * @param  mixed  $results
      * @param  \Illuminate\Database\Eloquent\Model  $model
      * @return \Illuminate\Database\Eloquent\Collection
@@ -150,7 +147,7 @@ class ScoutEngine extends Engine
             $results instanceof EloquentBuilder ||
             $results instanceof QueryBuilder
         ) {
-            return $results->get(); //@phpstan-ignore-line
+            return $results->get();
         }
 
         return $results;
@@ -159,7 +156,6 @@ class ScoutEngine extends Engine
     /**
      * Map the given results to instances of the given model via a lazy collection.
      *
-     * @param  \Laravel\Scout\Builder  $builder
      * @param  mixed  $results
      * @param  \Illuminate\Database\Eloquent\Model  $model
      * @return \Illuminate\Support\LazyCollection
@@ -195,7 +191,6 @@ class ScoutEngine extends Engine
      * Create a search index.
      *
      * @param  string  $name
-     * @param  array  $options
      * @return mixed
      */
     public function createIndex($name, array $options = [])

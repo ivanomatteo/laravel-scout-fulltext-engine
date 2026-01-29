@@ -9,15 +9,14 @@ class CompositeNameExtractor implements FeatureExtractor
         private int $minPrefixLen = 1,
         private int $maxPrefixLen = 2,
         private int $minSuffixLen = 3,
-    ) {
-    }
+    ) {}
 
     public function extract($searchText): array
     {
-        $searchText = preg_replace("/[[:punct:]]/", " ", $searchText);
+        $searchText = preg_replace('/[[:punct:]]/', ' ', $searchText);
 
-        $regex = '/((^|\\s)[^[:punct:]\\s]{' . $this->minPrefixLen . ',' . $this->maxPrefixLen .
-            '}\\s+[^[:punct:]\\s]{' . $this->minSuffixLen . ',})/';
+        $regex = '/((^|\\s)[^[:punct:]\\s]{'.$this->minPrefixLen.','.$this->maxPrefixLen.
+            '}\\s+[^[:punct:]\\s]{'.$this->minSuffixLen.',})/';
 
         if (! preg_match_all(
             $regex,
@@ -28,7 +27,7 @@ class CompositeNameExtractor implements FeatureExtractor
         }
 
         return collect($matches[0])->map(function ($v) {
-            return trim(implode($this->glue, preg_split("/\\s+/", trim($v))));
+            return trim(implode($this->glue, preg_split('/\\s+/', trim($v))));
         })->unique()->toArray();
     }
 }

@@ -31,7 +31,7 @@ class FullTextEntry extends Model
         /** @var FullTextIndexer */
         $ftindexer = App::make(FullTextIndexer::class);
 
-        $index_name = $targetModel->searchableAs(); //@phpstan-ignore-line
+        $index_name = $targetModel->searchableAs(); // @phpstan-ignore-line
         $q->where('index_name', $index_name);
 
         $ftindexer->applyFulltextCondition($q, $search, $targetModel);

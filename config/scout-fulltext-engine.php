@@ -51,7 +51,6 @@ return [
         'ft_min_word_len' => 3
     ],
 
-
     'pre_processing' => [
         'query' => [
             // the parser will process the text passed to
@@ -80,18 +79,17 @@ return [
                     'class' => CompositeNameExtractor::class,
                     'must_match' => false,
                     'starts_with' => true,
-                ]
+                ],
             ],
         ],
 
         'index_data' => [
             'extractors' => [
-                //this will add extracted metadata to te index
+                // this will add extracted metadata to te index
                 DottedWordsExtractor::class,
                 CompositeNameExtractor::class,
             ],
         ],
     ],
-
 
 ];
