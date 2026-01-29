@@ -81,12 +81,14 @@ class QueryParserMysqlFullTextBool implements QueryParser
 
     public function filterTokens(Collection $tokens): Collection
     {
-        return $tokens->map(function (string $word) {
+        $minlength = config('scout-fulltext-engine.fulltext_options.ft_min_word_len');
+
+        return $tokens->map(function (string $word) use ($minlength) {
             if (Str::contains($word, static::DEF_RESERVED_CHARS)) {
                 return '"'.trim(str_replace('"', ' ', $word)).'"';
             } else {
                 return collect(preg_split('/[\\s[:punct:]]+/', $word))
-                    ->filter(fn ($s) => (strlen($s) > 2));
+                    ->filter(fn ($s) => (strlen($s) >= $minlength));
             }
         })->flatten();
     }
